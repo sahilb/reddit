@@ -1,0 +1,180 @@
+
+  a {
+    color: #00bcd4;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.4s;
+  }
+  
+  a:hover {
+    color: #1976d2;
+  }
+   
+
+.favorite-icon {
+  background-image: url(https://abs.twimg.com/a/1516848903/img/animations/web_heart_animation_edge.png);
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 2900%;
+  height: 40px;
+  width: 40px;
+  left: 50%;
+  top: 50%;
+  cursor: pointer;
+  float: right;
+}
+
+.favorite-icon-enabled {
+background-image: url(https://abs.twimg.com/a/1516848903/img/animations/web_heart_animation_edge.png);
+background-position: right;
+background-repeat: no-repeat;
+background-size: 2900%;
+height: 40px;
+width: 40px;
+left: 50%;
+top: 50%;
+cursor: pointer;
+}
+
+.num_comments{
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+ 
+.content{
+  margin-top:70px;
+  margin-left:150px;
+  min-width: 1420px;
+}
+
+.left-panel { 
+  border: 1px solid rgb(237, 239, 240);
+  height: 650px;
+  width: 400px;
+  float: left;
+  overflow: auto
+}
+
+
+.right-panel{
+  border: 1px solid rgb(219, 225, 226);
+  height: 650px;
+  width: 1000px;
+  float: left;
+  text-align: center;
+}
+
+
+.left-row {
+  height: 80px;
+  width: 100%;
+  min-width: 380px;
+  margin: 1px 0px 1px 0px;
+  border-bottom: 1px solid #e2e2e2;
+  background: rgba(210, 195, 192, 0.1);
+  cursor:pointer;
+}
+
+.left-row .row-section {
+  float: left;
+}
+
+.left-row .thumbnail {
+  float:  left;
+  margin: 10px 0px 0px 10px;
+}
+.left-row .favorite {
+  float: left;
+}
+.left-row .title {
+  text-align: left;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #561f11;
+}
+.left-row .comments {
+  margin-top: 10px;
+  font-size: 11px;
+  text-align: left;
+  color: #08194c;
+}
+
+.left-row .links {
+  text-decoration: none;
+}
+.left-row:hover {
+  background-color: rgba(62, 175, 255, 0.1); 
+}
+
+.active-row{
+  border-right: 4px solid rgb(62, 175, 255);
+}
+
+.right-panel .title {
+  margin: 50px;
+}
+
+.right-panel .media {
+  margin: 50px;
+}
+
+.selected-nav {
+  border-bottom: 4px solid orangered;
+}
+.navbar {
+  background-image: url(./../reddit_logo.png);
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+}
+
+.signin{
+  margin-left: 40%;
+  margin-top: 120px;
+  width: 20%;
+  min-width: 400px;
+}
+
+.form-signin{
+  padding: 0px 20px;
+
+}
+
+.form-signin .row {
+  margin-bottom: 10px;
+  margin-left: 13px;
+  margin-right: 10px;
+  width: 90%;
+  border-radius: 1px;
+}
+
+.form-signin .row-btn{
+  background-color: rgba(255, 69, 0, 0.7);
+  margin-top: 40px;
+  border-color: rgba(255, 69, 0, 0.7)
+}
+
+.form-signin .row-btn:hover{
+  background-color: rgba(255, 69, 0, 0.7);
+}
+
+
+.signin-register a{
+  color: green !important;
+}
+.signin-register:hover{
+  background-color:rgba(211, 211, 211, 0.4);
+}
+
+.form-signin .invalid{
+  border-color: red
+}
+
+
+.form-signin .serverMessage {
+   color: red;
+   font-size: 12px;
+}
