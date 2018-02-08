@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { FieldGroup } from 'react-bootstrap';
 import xhr from 'xhr';
 import Header from './header'
@@ -54,19 +53,19 @@ class SignInApp extends React.Component {
             submitAttempts: submitAttempts + 1
         }, () => {
             if (this.validate()) {
-                xhr({
-                    method: 'post',
-                    body: JSON.stringify(this.state),
-                    uri: '/' + this.props.uri,
-                    headers: { 'Content-Type': 'application/json' }
-                }, (err, resp, body) => {
+                const callback = (err, resp, json) =>{
+                    if(resp && resp.statusCode == 401){
+                        this.setState({
+                            serverMessage: 'Invalid Credentials'
+                        })
+                        return;
+                    }
                     if (err) {
                         this.setState({
                             serverMessage: err
                         })
                         return
                     }
-                    const json = JSON.parse(body);
                     const { success, serverMessage } = json
                     if (success) {
                         window.location.href = window.location.origin + '/homepage'
@@ -75,7 +74,16 @@ class SignInApp extends React.Component {
                             serverMessage
                         })
                     }
-                })
+                }
+                const {username, password} = this.state;
+                xhr({
+                    method: 'post',
+                    body: JSON.stringify({username, password}),
+                    uri: '/' + this.props.uri + '?' + 'username=' + this.state.username + '&' + 'password=' + this.state.password,
+                    headers: { 'Content-Type': 'application/json' },
+                    json: true
+                }, callback)
+
             } else {
                 return false;
             }

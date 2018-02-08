@@ -26655,8 +26655,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// import { Navbar, Nav, NavItem } from 'react-bootstrap';
-
 
 var SignInApp = function (_React$Component) {
     _inherits(SignInApp, _React$Component);
@@ -26730,19 +26728,19 @@ var SignInApp = function (_React$Component) {
                 submitAttempts: submitAttempts + 1
             }, function () {
                 if (_this2.validate()) {
-                    (0, _xhr2.default)({
-                        method: 'post',
-                        body: JSON.stringify(_this2.state),
-                        uri: '/' + _this2.props.uri,
-                        headers: { 'Content-Type': 'application/json' }
-                    }, function (err, resp, body) {
+                    var callback = function callback(err, resp, json) {
+                        if (resp && resp.statusCode == 401) {
+                            _this2.setState({
+                                serverMessage: 'Invalid Credentials'
+                            });
+                            return;
+                        }
                         if (err) {
                             _this2.setState({
                                 serverMessage: err
                             });
                             return;
                         }
-                        var json = JSON.parse(body);
                         var success = json.success,
                             serverMessage = json.serverMessage;
 
@@ -26753,7 +26751,18 @@ var SignInApp = function (_React$Component) {
                                 serverMessage: serverMessage
                             });
                         }
-                    });
+                    };
+                    var _state2 = _this2.state,
+                        username = _state2.username,
+                        password = _state2.password;
+
+                    (0, _xhr2.default)({
+                        method: 'post',
+                        body: JSON.stringify({ username: username, password: password }),
+                        uri: '/' + _this2.props.uri + '?' + 'username=' + _this2.state.username + '&' + 'password=' + _this2.state.password,
+                        headers: { 'Content-Type': 'application/json' },
+                        json: true
+                    }, callback);
                 } else {
                     return false;
                 }

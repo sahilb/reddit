@@ -8,9 +8,9 @@
     "start": "npm run webpack; npm run babel; node functions/index.js",
     "build": "npm run webpack; npm run babel ",
     "watch:js": "watch 'npm run build' src/",
-    "mon": "nodemon --use_strict functions/index.js",
+    "mon": "nodemon --use_strict functions/src/server/index.js",
     "webpack": "node_modules/.bin/webpack",
-    "babel": "node_modules/.bin/babel src -d functions/src && node_modules/.bin/babel index.js -d functions"
+    "babel": "node_modules/.bin/babel src -d functions/src"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,8 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
+    "express-react-views": "^0.10.5",
+    "express-session": "^1.15.6",
     "mongoose": "^5.0.3",
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
@@ -28,6 +30,7 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
+    "serve-favicon": "^2.4.5",
     "xhr": "^2.4.1"
   },
   "devDependencies": {
