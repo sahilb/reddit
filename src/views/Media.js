@@ -20,7 +20,9 @@ class Media extends React.Component {
         if (source.length) {
             source = source.replace(/amp;/g, '');
         }
-
+        if(image.length == 0){
+            image = './no-preview.jpg'
+        }
         return {
             source, video, image
         }

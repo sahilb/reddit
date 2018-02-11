@@ -39071,7 +39071,7 @@ var LeftRow = function (_React$Component) {
         value: function getDimensions(post) {
             var height = 54;
             var width = 54;
-            if (!post.thumbnail || post.thumbnail == 'self') {
+            if (!post.thumbnail || post.thumbnail == 'self' || post.thumbnail == 'default') {
                 post.thumbnail = './reddit_logo.png';
                 height = 54;
                 width = 54;
@@ -39287,7 +39287,9 @@ var Media = function (_React$Component) {
             if (source.length) {
                 source = source.replace(/amp;/g, '');
             }
-
+            if (image.length == 0) {
+                image = './no-preview.jpg';
+            }
             return {
                 source: source, video: video, image: image
             };

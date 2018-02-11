@@ -10,6 +10,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
+import https from 'https';
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -94,7 +95,7 @@ app.post('/login', function (req, res) {
 
 
 app.get('/register', (req, res) => {
-    if(req.isAuthenticated()){
+    if (req.isAuthenticated()) {
         res.redirect('/homepage');
         return;
     }
@@ -135,7 +136,7 @@ app.post('/register', (req, res) => {
 
 
 app.get('/homepage', (req, res) => {
-    if(!req.isAuthenticated()){
+    if (!req.isAuthenticated()) {
         res.redirect('/login');
         return;
     }
@@ -150,8 +151,8 @@ app.get('/homepage', (req, res) => {
             </Html>
         ).pipe(res);
     })
-    
-    
+
+
 })
 
 
@@ -168,8 +169,27 @@ app.listen(3000, () => console.log('listening on port 3000'));
 
 
 
-function getRedditData(cb){
-    setTimeout(()=> cb(null, redditJson), 100);
+function getRedditData(cb) {
+    // setTimeout(()=> cb(null, redditJson), 100);
+    // return;
+
+    var url = 'https://www.reddit.com/hot.json';
+    
+    https.get(url, function (res) {
+        var body = '';
+
+        res.on('data', function (chunk) {
+            body += chunk;
+        });
+
+        res.on('end', function () {
+            var json = JSON.parse(body);
+            cb(null, json)
+        });
+    }).on('error', function (e) {
+        console.log("Got an error: ", e);
+        cb(e, {})
+    });
 }
 
 

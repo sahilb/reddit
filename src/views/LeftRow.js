@@ -31,7 +31,7 @@ class LeftRow extends React.Component {
     getDimensions(post) {
         let height = 54;
         let width = 54;
-        if (!post.thumbnail || post.thumbnail == 'self') {
+        if (!post.thumbnail || post.thumbnail == 'self' || post.thumbnail == 'default') {
             post.thumbnail = './reddit_logo.png'
             height = 54;
             width = 54;
