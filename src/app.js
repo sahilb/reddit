@@ -5,7 +5,7 @@ class App extends React.Component {
         super(props);
     }
     onClick() {
-        console.log('clicked')
+        console.log('clickedw')
     }
     render() {
         const fruits = this.props.fruits.map((fruit, i) => {

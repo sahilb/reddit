@@ -1,6 +1,6 @@
 
 import ReactDOM from 'react-dom';
-import App from './app.js'
+import App from './views/app.js'
 import SignInApp from './signin_app';
 import React from 'react';
 
@@ -15,5 +15,5 @@ if (view === 'login' || view === 'register') {
 
     ReactDOM.hydrate(<SignInApp  {...initialData} />, document.querySelector('#app'))
 } else {
-    ReactDOM.hydrate(<App fruits={initialData.fruits} />, document.querySelector('#app'))
+    ReactDOM.hydrate(<App json={initialData.json} />, document.querySelector('#app'))
 }

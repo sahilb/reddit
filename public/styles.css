@@ -178,3 +178,8 @@ cursor: pointer;
    color: red;
    font-size: 12px;
 }
+
+
+.logout-btn a{
+  color: green !important;
+}
