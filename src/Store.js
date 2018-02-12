@@ -10,7 +10,7 @@ class Store {
             activeFavoritePost: undefined,
             isLoggedIn: true
         }
-        
+
         this.listeners = [];
         this.actions = {};
         this.bindActions()
@@ -26,12 +26,48 @@ class Store {
             const { data } = post;
             const { id, num_comments, title, url, permalink, thumbnail, thumbnail_height, thumbnail_width, preview, media } = data;
             const isFavorite = (i % 5 == 0);
+
+            let image = '';
+            let video = '';
+            let source = '';
+            let previewType = '';
+            let previewUrl = '';
+            try {
+                source = data.preview.images[0].variants.mp4 ? data.preview.images[0].variants.mp4.source.url : '';
+            } catch (e) { }
+
+            try {
+                video = data.media.reddit_video.fallback_url;
+            } catch (e) { }
+
+            try {
+                image = data.preview.images[0].source.url;
+            } catch (e) { }
+
+            if (source) {
+                source = source.replace(/amp;/g, '');
+                previewType = 'video'
+                previewUrl = source;
+            } else if (video) {
+                previewType = 'video'
+                previewUrl = video
+            } else {
+                previewType = 'image';
+                if (image.length == 0) {
+                    previewUrl = './no-preview.jpg'
+                }else{
+                    previewUrl = image;
+                }
+            }
+
             return {
-                id, num_comments, title, url, permalink, thumbnail, thumbnail_height, thumbnail_width, preview, media, isFavorite
+                id, num_comments, title,
+                url, permalink, thumbnail, thumbnail_height, thumbnail_width,
+                isFavorite, previewUrl, previewType
             }
         });
     }
-    bindActions(){
+    bindActions() {
         const enablePost = (post) => {
             if (this.state.view == 'hot') {
                 this.state.activeHotPost = post;
@@ -41,7 +77,7 @@ class Store {
             this.notify();
         };
 
-        const clickHome = ()=>{
+        const clickHome = () => {
             if (this.state.view == 'hot') {
                 return;
             }
@@ -49,7 +85,7 @@ class Store {
             this.notify();
         };
 
-        const clickFavorites = ()=>{
+        const clickFavorites = () => {
             if (this.state.view == 'favorites') {
                 return;
             }
@@ -57,7 +93,7 @@ class Store {
             this.notify();
         }
 
-        const addToFavorites= (post)=> {
+        const addToFavorites = (post) => {
             let p = this.state.posts.filter((x) => x == post)[0]
             p.isFavorite = true;
             this.notify();
@@ -74,10 +110,10 @@ class Store {
         this.actions.clickFavorites = clickFavorites.bind(this)
         this.actions.addToFavorites = addToFavorites.bind(this)
         this.actions.removeFromFavorites = removeFromFavorites.bind(this)
-    
+
     }
 }
-   
- 
 
-export default  Store;
+
+
+export default Store;

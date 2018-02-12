@@ -39297,18 +39297,16 @@ var Media = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _extractUrl = this.extractUrl(),
-                source = _extractUrl.source,
-                video = _extractUrl.video,
-                image = _extractUrl.image;
-
+            var _props$post = this.props.post,
+                previewType = _props$post.previewType,
+                previewUrl = _props$post.previewUrl;
             var width = 640,
                 height = 480;
 
             return _react2.default.createElement(
                 'div',
                 { className: 'media' },
-                source.length ? _react2.default.createElement('video', { src: source, height: height, width: width, loop: 'loop', controls: true, muted: true }) : video.length ? _react2.default.createElement('video', { src: video, height: height, width: width, controls: true, muted: true }) : _react2.default.createElement('img', { height: height, width: width, src: image })
+                previewType == 'video' ? _react2.default.createElement('video', { src: previewUrl, height: height, width: width, loop: 'loop', controls: true, muted: true }) : _react2.default.createElement('img', { height: height, width: width, src: previewUrl })
             );
         }
     }]);
@@ -39441,8 +39439,44 @@ var Store = function () {
                     media = data.media;
 
                 var isFavorite = i % 5 == 0;
+
+                var image = '';
+                var video = '';
+                var source = '';
+                var previewType = '';
+                var previewUrl = '';
+                try {
+                    source = data.preview.images[0].variants.mp4 ? data.preview.images[0].variants.mp4.source.url : '';
+                } catch (e) {}
+
+                try {
+                    video = data.media.reddit_video.fallback_url;
+                } catch (e) {}
+
+                try {
+                    image = data.preview.images[0].source.url;
+                } catch (e) {}
+
+                if (source) {
+                    source = source.replace(/amp;/g, '');
+                    previewType = 'video';
+                    previewUrl = source;
+                } else if (video) {
+                    previewType = 'video';
+                    previewUrl = video;
+                } else {
+                    previewType = 'image';
+                    if (image.length == 0) {
+                        previewUrl = './no-preview.jpg';
+                    } else {
+                        previewUrl = image;
+                    }
+                }
+
                 return {
-                    id: id, num_comments: num_comments, title: title, url: url, permalink: permalink, thumbnail: thumbnail, thumbnail_height: thumbnail_height, thumbnail_width: thumbnail_width, preview: preview, media: media, isFavorite: isFavorite
+                    id: id, num_comments: num_comments, title: title,
+                    url: url, permalink: permalink, thumbnail: thumbnail, thumbnail_height: thumbnail_height, thumbnail_width: thumbnail_width,
+                    isFavorite: isFavorite, previewUrl: previewUrl, previewType: previewType
                 };
             });
         }

@@ -28,19 +28,17 @@ class Media extends React.Component {
         }
     }
     render() {
-        const { source, video, image } = this.extractUrl()
+        const { previewType, previewUrl } = this.props.post;
         const [width, height] = [640, 480];
         return (
             <div className="media">
 
-                {source.length ? (
-                    <video src={source} height={height} width={width} loop="loop" controls muted={true} />
+                {previewType == 'video' ? (
+                    <video src={previewUrl} height={height} width={width} loop="loop" controls muted={true} />
                 ) : (
-                        video.length ? (
-                            <video src={video} height={height} width={width} controls muted={true} />
-                        ) : (
-                                <img height={height} width={width} src={image} />
-                            )
+                         
+                    <img height={height} width={width} src={previewUrl} />
+                            
                     )}
 
             </div>

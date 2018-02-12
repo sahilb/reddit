@@ -150,9 +150,7 @@ app.get('/homepage', (req, res) => {
             <Html initialState={JSON.stringify(initialState)}>
             </Html>
         ).pipe(res);
-    })
-
-
+    });
 })
 
 
@@ -168,10 +166,9 @@ app.get('**', (req, res) => {
 app.listen(3000, () => console.log('listening on port 3000'));
 
 
-
 function getRedditData(cb) {
-    // setTimeout(()=> cb(null, redditJson), 100);
-    // return;
+    setTimeout(()=> cb(null, redditJson), 100);
+    return;
 
     var url = 'https://www.reddit.com/hot.json';
     
