@@ -28,15 +28,9 @@ import Post from './Post';
 
 const log = console.log.bind(console);
 
-const redditJson = require('./hot.json');
-
 const app = express();
 
 app.use(logger('dev'));
-
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
 
 app.use(cookieParser());
 app.use(require('express-session')({
@@ -196,26 +190,25 @@ app.listen(3000, () => console.log('listening on port 3000'));
 function getRedditData(userId, cb) {
 
     Post.find({ userId: userId }).exec((x, posts) => {
-        console.log('favorites  found ', posts.map(x => x.name));
+
         let getByIds
 
         if (posts.length) {
             let s = new Set();
             posts.map(post => s.add(post.name));
             const names = [...s].join(',');
-            const idsUrl = `https://www.reddit.com/by_id/${names}.json`; 
+            const idsUrl = `https://www.reddit.com/by_id/${names}.json`;
             getByIds = getFromRedditApi(idsUrl);
         } else {
             getByIds = Promise.resolve({});
         }
 
         const hotUrl = 'https://www.reddit.com/hot.json';
-        const getHot = getFromRedditApi(hotUrl);
+        const getHot = getHotPosts(hotUrl);
 
         Promise.all([getHot, getByIds])
             .then(result => {
                 const [hot, fav] = result;
-                // console.log('favorites', fav)
                 cb(null, {
                     hot,
                     fav
@@ -230,6 +223,13 @@ function getRedditData(userId, cb) {
             })
 
     });
+}
+function getHotPosts(url) {
+    return readFromFile()
+        .catch(e => {
+            return getFromRedditApi(url)
+                .then(json => saveToFile(json));
+        })
 }
 
 function getFromRedditApi(url) {
@@ -253,6 +253,43 @@ function getFromRedditApi(url) {
     })
 }
 
+function saveToFile(data){
+    const file = 'hot1.json';
+
+    return Promise.resolve()
+    .then(()=>{
+        fs.writeFileSync(file, JSON.stringify(data));
+        return Promise.resolve(data);
+    })
+}
+
+function readFromFile() {
+    const file = 'hot1.json';
+    return new Promise((resolve, reject) => {
+        fs.stat(file, (err, f) => {
+            if (err) {
+                reject(err)
+            }
+            else {
+                const { mtime } = f;
+                const now = new Date();
+                if (now.getTime() - mtime.getTime() < 200000) {
+                     
+                     try{
+                        let contents = fs.readFileSync(file).toString();
+                        contents = JSON.parse(contents)
+                        resolve(contents);
+                     }catch(e){
+                        reject({});
+                     }
+                     
+                } else {
+                    reject({});
+                }
+            }
+        })
+    })
+}
 
 
 
