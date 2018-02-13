@@ -31,8 +31,7 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "serve-favicon": "^2.4.5",
-    "xhr": "^2.4.1",
-    "xmlhttprequest": "^1.8.0"
+    "xhr": "^2.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -18,9 +18,8 @@ var Account = require('./account');
 
 var favicon = require('serve-favicon');
 
-import App from './../app';
 import Html from './../html'
-import SignInApp from './../signin_app'
+import SignInApp from './../views/signin_app'
 
 import Homepage from './../views/HomePage'
 import store from './../server/store'
