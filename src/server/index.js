@@ -22,7 +22,6 @@ import Html from './../html'
 import SignInApp from './../views/signin_app'
 
 import Homepage from './../views/HomePage'
-import store from './../server/store'
 import Post from './Post';
 
 const log = console.log.bind(console);
