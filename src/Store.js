@@ -2,8 +2,9 @@ import xhr from 'xhr';
 
 class Store {
     constructor(hot, favorites) {
-        const hotPosts = this.filter(hot);
-        const favoritePosts = this.filter(favorites, true);
+
+        const hotPosts = this.filter(hot ? hot.data.children : []);
+        const favoritePosts = this.filter((favorites && favorites.data) ? favorites.data.children : [], true);
         favoritePosts.forEach(p => {
             const pHot = hotPosts.find(post => post.id == p.id)
             if (pHot) {
@@ -30,8 +31,8 @@ class Store {
     notify() {
         this.listeners.forEach(listener => listener(this))
     }
-    filter(json, isFavorite) {
-        return json.data.children.map((post, i) => {
+    filter(jsonPosts, isFavorite) {
+        return jsonPosts.map((post, i) => {
             const { data } = post;
             const { id, num_comments, title, url,
                 permalink, thumbnail, thumbnail_height,

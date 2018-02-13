@@ -197,14 +197,20 @@ function getRedditData(userId, cb) {
 
     Post.find({ userId: userId }).exec((x, posts) => {
         console.log('favorites  found ', posts.map(x => x.name));
-        let s = new Set();
-        posts.map(post => s.add(post.name));
-        const names = [...s].join(',');
-        const idsUrl = `https://www.reddit.com/by_id/${names}.json`;
-        const hotUrl = 'https://www.reddit.com/hot.json';
+        let getByIds
 
+        if (posts.length) {
+            let s = new Set();
+            posts.map(post => s.add(post.name));
+            const names = [...s].join(',');
+            const idsUrl = `https://www.reddit.com/by_id/${names}.json`; \
+            getByIds = getFromRedditApi(idsUrl);
+        } else {
+            getByIds = Promise.resolve({});
+        }
+
+        const hotUrl = 'https://www.reddit.com/hot.json';
         const getHot = getFromRedditApi(hotUrl);
-        const getByIds = getFromRedditApi(idsUrl);
 
         Promise.all([getHot, getByIds])
             .then(result => {
@@ -243,7 +249,7 @@ function getFromRedditApi(url) {
         });
     })
 }
- 
+
 
 
 
