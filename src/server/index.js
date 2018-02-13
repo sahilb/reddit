@@ -203,7 +203,7 @@ function getRedditData(userId, cb) {
             let s = new Set();
             posts.map(post => s.add(post.name));
             const names = [...s].join(',');
-            const idsUrl = `https://www.reddit.com/by_id/${names}.json`; \
+            const idsUrl = `https://www.reddit.com/by_id/${names}.json`; 
             getByIds = getFromRedditApi(idsUrl);
         } else {
             getByIds = Promise.resolve({});
@@ -223,7 +223,10 @@ function getRedditData(userId, cb) {
 
             }).catch(e => {
                 console.log('error in getting server data', e);
-                cb(e);
+                cb(null, {
+                    hot: {},
+                    fav: {}
+                });
             })
 
     });

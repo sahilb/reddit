@@ -39660,8 +39660,8 @@ var Store = function () {
     function Store(hot, favorites) {
         _classCallCheck(this, Store);
 
-        var hotPosts = this.filter(hot);
-        var favoritePosts = this.filter(favorites, true);
+        var hotPosts = this.filter(hot && hot.data ? hot.data.children : []);
+        var favoritePosts = this.filter(favorites && favorites.data ? favorites.data.children : [], true);
         favoritePosts.forEach(function (p) {
             var pHot = hotPosts.find(function (post) {
                 return post.id == p.id;
@@ -39701,8 +39701,8 @@ var Store = function () {
         }
     }, {
         key: 'filter',
-        value: function filter(json, isFavorite) {
-            return json.data.children.map(function (post, i) {
+        value: function filter(jsonPosts, isFavorite) {
+            return jsonPosts.map(function (post, i) {
                 var data = post.data;
                 var id = data.id,
                     num_comments = data.num_comments,

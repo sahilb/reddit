@@ -3,7 +3,7 @@ import xhr from 'xhr';
 class Store {
     constructor(hot, favorites) {
 
-        const hotPosts = this.filter(hot ? hot.data.children : []);
+        const hotPosts = this.filter((hot && hot.data) ? hot.data.children : []);
         const favoritePosts = this.filter((favorites && favorites.data) ? favorites.data.children : [], true);
         favoritePosts.forEach(p => {
             const pHot = hotPosts.find(post => post.id == p.id)
