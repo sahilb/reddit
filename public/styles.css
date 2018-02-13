@@ -107,11 +107,12 @@ cursor: pointer;
   text-decoration: none;
 }
 .left-row:hover {
-  background-color: rgba(62, 175, 255, 0.1); 
+  background-color: rgba(62, 175, 255, 0.2);
 }
 
 .active-row{
   border-right: 4px solid rgb(62, 175, 255);
+  background-color: rgba(62, 175, 255, 0.1)
 }
 
 .right-panel .title {
