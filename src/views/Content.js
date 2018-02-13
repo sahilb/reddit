@@ -19,14 +19,11 @@ class Content extends React.Component {
             activePost;
 
         if (storeState.view === 'hot') {
-            posts = storeState.posts;
+            posts = storeState.hot;
             activePost = storeState.activeHotPost;
         } else {
-            let { activeFavoritePost } = storeState
-            posts = storeState.posts.filter(x => x.isFavorite);
-            if (activeFavoritePost && posts.includes(activeFavoritePost)) {
-                activePost = activeFavoritePost
-            }
+            posts = storeState.favorites;
+            activePost = storeState.activeFavoritePost;
         }
         return { posts, activePost }
     }

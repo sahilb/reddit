@@ -3,12 +3,12 @@ import Media from './Media.js';
 import Title from './Title.js';
 
 class RightPanel extends React.Component {
-    constructor (props){
+    constructor(props) {
         super(props);
     }
     render() {
-        const {post} = this.props;
-        if(!post){
+        const { post } = this.props;
+        if (!post) {
             return <div className='right-panel' />
         }
         return (

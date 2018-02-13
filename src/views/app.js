@@ -7,8 +7,9 @@ import Store from './../Store'
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.store = new Store(this.props.json);
-        console.log(this.props);
+        const {hot, fav} = this.props
+        this.store = new Store(hot, fav);
+        console.log(this.props.json);
     }
      
     render() {

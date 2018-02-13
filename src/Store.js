@@ -1,13 +1,22 @@
+import xhr from 'xhr';
 
 class Store {
-    constructor(json) {
-        const posts = this.filter(json);
+    constructor(hot, favorites) {
+        const hotPosts = this.filter(hot);
+        const favoritePosts = this.filter(favorites, true);
+        favoritePosts.forEach(p => {
+            const pHot = hotPosts.find(post => post.id == p.id)
+            if (pHot) {
+                pHot.isFavorite = true;
+            }
+        })
 
         this.state = {
             view: 'hot', // | favorites
-            posts: posts,
-            activeHotPost: posts[0],
-            activeFavoritePost: undefined,
+            favorites: favoritePosts,
+            hot: hotPosts,
+            activeHotPost: hotPosts[0],
+            activeFavoritePost: (favoritePosts && favoritePosts.length) ? favoritePosts[0] : undefined,
             isLoggedIn: true
         }
 
@@ -21,12 +30,14 @@ class Store {
     notify() {
         this.listeners.forEach(listener => listener(this))
     }
-    filter(json) {
+    filter(json, isFavorite) {
         return json.data.children.map((post, i) => {
             const { data } = post;
-            const { id, num_comments, title, url, permalink, thumbnail, thumbnail_height, thumbnail_width, preview, media } = data;
-            const isFavorite = (i % 5 == 0);
-
+            const { id, num_comments, title, url,
+                permalink, thumbnail, thumbnail_height,
+                thumbnail_width, preview, media, name
+            } = data;
+            isFavorite = !!isFavorite;
             let image = '';
             let video = '';
             let source = '';
@@ -55,7 +66,7 @@ class Store {
                 previewType = 'image';
                 if (image.length == 0) {
                     previewUrl = './no-preview.jpg'
-                }else{
+                } else {
                     previewUrl = image;
                 }
             }
@@ -63,7 +74,7 @@ class Store {
             return {
                 id, num_comments, title,
                 url, permalink, thumbnail, thumbnail_height, thumbnail_width,
-                isFavorite, previewUrl, previewType
+                isFavorite, previewUrl, previewType, name
             }
         });
     }
@@ -94,15 +105,26 @@ class Store {
         }
 
         const addToFavorites = (post) => {
-            let p = this.state.posts.filter((x) => x == post)[0]
-            p.isFavorite = true;
+            var x = this.state.hot.filter(p => p.id === post.id)
+            if (x.length) {
+                x[0].isFavorite = true;
+            }
+            this.state.favorites.push(post);
             this.notify();
-            // send network request
+            this.sendToServer(post.name, true, () => { })
         };
         const removeFromFavorites = (post) => {
-            let p = this.state.posts.filter((x) => x == post)[0]
-            p.isFavorite = false;
+            var x = this.state.hot.filter(p => p.id === post.id)
+            if (x.length) {
+                x[0].isFavorite = false;
+            }
+            const { activeFavoritePost } = this.state;
+            if (activeFavoritePost && activeFavoritePost.id == post.id) {
+                this.state.activeFavoritePost = undefined;
+            }
+            this.state.favorites = this.state.favorites.filter(p => p.id !== post.id);
             this.notify();
+            this.sendToServer(post.name, false, () => { })
         }
 
         this.actions.enablePost = enablePost.bind(this)
@@ -111,6 +133,13 @@ class Store {
         this.actions.addToFavorites = addToFavorites.bind(this)
         this.actions.removeFromFavorites = removeFromFavorites.bind(this)
 
+    }
+    sendToServer(postId, fav, callback) {
+        xhr({
+            method: 'post',
+            uri: '/updatePost?name=' + postId + '&enable=' + fav,
+            headers: { 'Content-Type': 'application/json' }
+        }, callback)
     }
 }
 

@@ -8,15 +8,23 @@ class LeftRow extends React.Component {
         this.state = {
             isFavorite: post.isFavorite
         }
-        store.addListener((x) => {
-            let p = store.state.posts.filter(x => x=== post)[0];
+        store.addListener(() => {
+            const { view } = store.state;
+            const getPosts = (view) => view == 'hot' ? store.state.hot : store.state.favorites;
 
-            this.setState({
-                isFavorite: p.isFavorite
-            })
+            let p = getPosts(view).filter(x => x.id === post.id);
+            if (p.length) {
+                this.setState({
+                    isFavorite: p[0].isFavorite
+                })
+            }
+
         })
     }
-    onRowClicked() {
+    onRowClicked(ev) {
+        if (ev.target.className.startsWith('favorite-icon')) {
+            return;
+        }
         this.props.store.actions.enablePost(this.props.post)
     }
     splitTitle() {
@@ -46,7 +54,8 @@ class LeftRow extends React.Component {
         return { height, width }
     }
 
-    onFavoriteToggled() {
+    onFavoriteToggled(ev) {
+        
         const { post, store } = this.props;
         if (this.state.isFavorite) {
             store.actions.removeFromFavorites(post);
@@ -54,9 +63,9 @@ class LeftRow extends React.Component {
             store.actions.addToFavorites(post);
         }
     }
-    isActive(){
-        const {store} = this.props;
-        const {state} = store;
+    isActive() {
+        const { store } = this.props;
+        const { state } = store;
         const activePost = state.view == 'hot' ? state.activeHotPost : state.activeFavoritePost;
         return activePost === this.props.post;
     }
@@ -65,11 +74,11 @@ class LeftRow extends React.Component {
         const url = "https://www.reddit.com" + post.permalink;
         const { height, width } = this.getDimensions(post);
         const favClassName = (this.state.isFavorite ? 'favorite-icon-enabled' : 'favorite-icon') + ' row-section';
-        
-        const rowClassName = 'left-row ' + (this.isActive() ? 'active-row' : ''  );
+
+        const rowClassName = 'left-row ' + (this.isActive() ? 'active-row' : '');
 
         return (
-            <div className={rowClassName}  key={post.id} onClick={this.onRowClicked.bind(this)}>
+            <div className={rowClassName} key={post.id} onClick={this.onRowClicked.bind(this)}>
                 <div className="thumbnail row-section">
                     <img alt="thumbnail" src={post.thumbnail} height={height} width={width} />
                 </div>

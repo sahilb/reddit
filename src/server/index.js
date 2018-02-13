@@ -24,6 +24,9 @@ import SignInApp from './../signin_app'
 
 import Homepage from './../views/HomePage'
 import store from './../server/store'
+import Post from './Post';
+
+const log = console.log.bind(console);
 
 const redditJson = require('./hot.json');
 
@@ -31,8 +34,9 @@ const app = express();
 
 app.use(logger('dev'));
 
+
+// app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 app.use(require('express-session')({
@@ -141,10 +145,11 @@ app.get('/homepage', (req, res) => {
         return;
     }
 
-    getRedditData((err, json) => {
+    getRedditData(req.user.id, (err, json) => {
         const initialState = {
             view: 'homepage',
-            json
+            hot: json.hot,
+            fav: json.fav
         }
         ReactDOMServer.renderToNodeStream(
             <Html initialState={JSON.stringify(initialState)}>
@@ -153,6 +158,28 @@ app.get('/homepage', (req, res) => {
     });
 })
 
+app.post('/updatePost', (req, res) => {
+    if (!req.isAuthenticated()) {
+        res.redirect('/login');
+        return;
+    }
+
+    const { enable, name } = req.query;
+    const userId = req.user.id;
+    if (enable == 'true') {
+        var post = new Post({ name, userId });
+        post.save((err) => {
+            err && log('error in saving ', err);
+            res.send(JSON.stringify({ success: true, serverMessage: '' }));
+        });
+    } else {
+        Post.remove({ name, userId }, (err) => {
+            err && log('error in removing ', err);
+            res.send(JSON.stringify({ success: true, serverMessage: '' }));
+        })
+    }
+
+})
 
 app.get('/logout', function (req, res) {
     req.logout();
@@ -166,29 +193,57 @@ app.get('**', (req, res) => {
 app.listen(3000, () => console.log('listening on port 3000'));
 
 
-function getRedditData(cb) {
-    setTimeout(()=> cb(null, redditJson), 100);
-    return;
+function getRedditData(userId, cb) {
 
-    var url = 'https://www.reddit.com/hot.json';
-    
-    https.get(url, function (res) {
-        var body = '';
+    Post.find({ userId: userId }).exec((x, posts) => {
+        console.log('favorites  found ', posts.map(x => x.name));
+        let s = new Set();
+        posts.map(post => s.add(post.name));
+        const names = [...s].join(',');
+        const idsUrl = `https://www.reddit.com/by_id/${names}.json`;
+        const hotUrl = 'https://www.reddit.com/hot.json';
 
-        res.on('data', function (chunk) {
-            body += chunk;
-        });
+        const getHot = getFromRedditApi(hotUrl);
+        const getByIds = getFromRedditApi(idsUrl);
 
-        res.on('end', function () {
-            var json = JSON.parse(body);
-            cb(null, json)
-        });
-    }).on('error', function (e) {
-        console.log("Got an error: ", e);
-        cb(e, {})
+        Promise.all([getHot, getByIds])
+            .then(result => {
+                const [hot, fav] = result;
+                // console.log('favorites', fav)
+                cb(null, {
+                    hot,
+                    fav
+                })
+
+            }).catch(e => {
+                console.log('error in getting server data', e);
+                cb(e);
+            })
+
     });
 }
 
+function getFromRedditApi(url) {
+    return new Promise((resolve, reject) => {
+
+        https.get(url, function (res) {
+            var body = '';
+
+            res.on('data', function (chunk) {
+                body += chunk;
+            });
+
+            res.on('end', function () {
+                var json = JSON.parse(body);
+                resolve(json)
+            });
+        }).on('error', function (e) {
+            console.log("Got an error: ", e);
+            reject(e)
+        });
+    })
+}
+ 
 
 
 
