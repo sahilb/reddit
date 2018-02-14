@@ -44,7 +44,11 @@ passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-mongoose.connect('mongodb://localhost/login_auth');
+const mongoDbUri = 'mongodb://heroku_5dks5pzp:8h8fc8m5286ni7sakj5hialicb@ds235708.mlab.com:35708/heroku_5dks5pzp'
+const localUri = 'mongodb://localhost/login_auth';
+
+mongoose.connect(mongoDbUri);
+//mongoose.connect('mongodb://localhost/login_auth');
 
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
