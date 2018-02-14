@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run webpack; npm run babel; node functions/src/server/index.js",
+    "start": "node functions/src/server/index.js",
     "build": "npm run webpack; npm run babel ",
     "watch:js": "watch 'npm run build' src/",
     "mon": "nodemon --use_strict functions/src/server/index.js",
