@@ -16,9 +16,9 @@ var _xhr = require('xhr');
 
 var _xhr2 = _interopRequireDefault(_xhr);
 
-var _header = require('./header');
+var _Header = require('./Header');
 
-var _header2 = _interopRequireDefault(_header);
+var _Header2 = _interopRequireDefault(_Header);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -160,7 +160,7 @@ var SignInApp = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_header2.default, { otherUri: this.props.otherUri, otherTitle: this.props.otherTitle }),
+                _react2.default.createElement(_Header2.default, { otherUri: this.props.otherUri, otherTitle: this.props.otherTitle }),
                 _react2.default.createElement(
                     'div',
                     { className: 'jumbotron signin' },

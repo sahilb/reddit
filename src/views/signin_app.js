@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldGroup } from 'react-bootstrap';
 import xhr from 'xhr';
-import Header from './header'
+import Header from './Header'
 
 class SignInApp extends React.Component {
     constructor(props) {

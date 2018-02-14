@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderBar from './header.js'
+import HeaderBar from './Header.js'
 import Content from './Content';
 import Store from './../Store'
 

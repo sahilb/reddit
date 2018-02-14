@@ -26959,9 +26959,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _header = __webpack_require__(93);
+var _Header = __webpack_require__(93);
 
-var _header2 = _interopRequireDefault(_header);
+var _Header2 = _interopRequireDefault(_Header);
 
 var _Content = __webpack_require__(302);
 
@@ -27002,7 +27002,7 @@ var App = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_header2.default, { store: this.store }),
+                _react2.default.createElement(_Header2.default, { store: this.store }),
                 _react2.default.createElement(_Content2.default, { store: this.store })
             );
         }
@@ -40042,9 +40042,9 @@ var _xhr = __webpack_require__(140);
 
 var _xhr2 = _interopRequireDefault(_xhr);
 
-var _header = __webpack_require__(93);
+var _Header = __webpack_require__(93);
 
-var _header2 = _interopRequireDefault(_header);
+var _Header2 = _interopRequireDefault(_Header);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40186,7 +40186,7 @@ var SignInApp = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_header2.default, { otherUri: this.props.otherUri, otherTitle: this.props.otherTitle }),
+                _react2.default.createElement(_Header2.default, { otherUri: this.props.otherUri, otherTitle: this.props.otherTitle }),
                 _react2.default.createElement(
                     'div',
                     { className: 'jumbotron signin' },

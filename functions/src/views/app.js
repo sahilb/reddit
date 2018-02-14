@@ -10,9 +10,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _header = require('./header.js');
+var _Header = require('./Header.js');
 
-var _header2 = _interopRequireDefault(_header);
+var _Header2 = _interopRequireDefault(_Header);
 
 var _Content = require('./Content');
 
@@ -53,7 +53,7 @@ var App = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_header2.default, { store: this.store }),
+                _react2.default.createElement(_Header2.default, { store: this.store }),
                 _react2.default.createElement(_Content2.default, { store: this.store })
             );
         }
